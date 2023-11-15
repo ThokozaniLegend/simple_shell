@@ -94,7 +94,7 @@ int shellcustom_cd(char **args, char __attribute__((__unused__)) **front)
 	char *oldpwd = NULL, *pwd = NULL;
 	struct stat dir;
 
-	oldpwd = findcwd(oldpwd, 0);
+	oldpwd = getcwd(oldpwd, 0);
 	if (!oldpwd)
 		return (-1);
 
@@ -132,7 +132,7 @@ int shellcustom_cd(char **args, char __attribute__((__unused__)) **front)
 			chdir(*(_findenv("HOME")) + 5);
 	}
 
-	pwd = findcwd(pwd, 0);
+	pwd = getcwd(pwd, 0);
 	if (!pwd)
 		return (-1);
 
@@ -191,4 +191,3 @@ int shellcustom_help(char **args, char __attribute__((__unused__)) **front)
 
 	return (0);
 }
-

@@ -19,7 +19,7 @@
 #define EXIT -3
 
 /* Global environemnt */
-extern char **enviro_;
+extern char **environ;
 /* Global program name */
 char *name;
 /* Global history counter */
@@ -95,6 +95,7 @@ int _strcmp(char *s1, char *s2);
 int _strncmp(const char *s1, const char *s2, size_t n);
 
 /* Builtins */
+char *getcwd(char *buf, size_t size);
 int (*find_builtin(char *command))(char **args, char **front);
 int shellcustom_exit(char **args, char **front);
 int shellcustom_env(char **args, char __attribute__((__unused__)) **front);

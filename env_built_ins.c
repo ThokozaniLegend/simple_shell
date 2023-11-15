@@ -20,12 +20,12 @@ int shellcustom_env(char **args, char __attribute__((__unused__)) **front)
 	int index;
 	char nc = '\n';
 
-	if (!enviro_)
+	if (!environ)
 		return (-1);
 
-	for (index = 0; enviro_[index]; index++)
+	for (index = 0; environ[index]; index++)
 	{
-		write(STDOUT_FILENO, enviro_[index], _strlen(enviro_[index]));
+		write(STDOUT_FILENO, environ[index], _strlen(environ[index]));
 		write(STDOUT_FILENO, &nc, 1);
 	}
 
@@ -45,7 +45,7 @@ int shellcustom_env(char **args, char __attribute__((__unused__)) **front)
  */
 int shellcustom_setenv(char **args, char __attribute__((__unused__)) **front)
 {
-	char **env_var = NULL, **new_enviro_, *new_value;
+	char **env_var = NULL, **new_environ, *new_value;
 	size_t size;
 	int index;
 
@@ -66,23 +66,23 @@ int shellcustom_setenv(char **args, char __attribute__((__unused__)) **front)
 		*env_var = new_value;
 		return (0);
 	}
-	for (size = 0; enviro_[size]; size++)
+	for (size = 0; environ[size]; size++)
 		;
 
-	new_enviro_ = malloc(sizeof(char *) * (size + 2));
-	if (!new_enviro_)
+	new_environ = malloc(sizeof(char *) * (size + 2));
+	if (!new_environ)
 	{
 		free(new_value);
 		return (create_error(args, -1));
 	}
 
-	for (index = 0; enviro_[index]; index++)
-		new_enviro_[index] = enviro_[index];
+	for (index = 0; environ[index]; index++)
+		new_environ[index] = environ[index];
 
-	free(enviro_);
-	enviro_ = new_enviro_;
-	enviro_[index] = new_value;
-	enviro_[index + 1] = NULL;
+	free(environ);
+	environ = new_environ;
+	environ[index] = new_value;
+	environ[index + 1] = NULL;
 
 	return (0);
 }
@@ -98,7 +98,7 @@ int shellcustom_setenv(char **args, char __attribute__((__unused__)) **front)
  */
 int shellcustom_unsetenv(char **args, char __attribute__((__unused__)) **front)
 {
-	char **env_var, **new_enviro_;
+	char **env_var, **new_environ;
 	size_t size;
 	int index, index2;
 
@@ -108,26 +108,27 @@ int shellcustom_unsetenv(char **args, char __attribute__((__unused__)) **front)
 	if (!env_var)
 		return (0);
 
-	for (size = 0; enviro_[size]; size++)
+	for (size = 0; environ[size]; size++)
 		;
 
-	new_enviro_ = malloc(sizeof(char *) * size);
-	if (!new_enviro_)
+	new_environ = malloc(sizeof(char *) * size);
+	if (!new_environ)
 		return (create_error(args, -1));
 
-	for (index = 0, index2 = 0; enviro_[index]; index++)
+	for (index = 0, index2 = 0; environ[index]; index++)
 	{
-		if (*env_var == enviro_[index])
+		if (*env_var == environ[index])
 		{
 			free(*env_var);
 			continue;
 		}
-		new_enviro_[index2] = enviro_[index];
+		new_environ[index2] = environ[index];
 		index2++;
 	}
-	free(enviro_);
-	enviro_ = new_enviro_;
-	enviro_[size - 1] = NULL;
+	free(environ);
+	environ = new_environ;
+	environ[size - 1] = NULL;
 
 	return (0);
 }
+
